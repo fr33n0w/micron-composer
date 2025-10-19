@@ -1,4 +1,4 @@
-# 🎨 Micron Page Composer
+# 🎨 Micron Page Composer v1 (beta)
 
 **A powerful WYSIWYG editor for creating NomadNet-ready .mu pages using the Micron markup language.**
 
