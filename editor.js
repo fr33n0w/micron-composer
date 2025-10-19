@@ -958,6 +958,7 @@ window.addEventListener('load', () => {
         editor.value = DEFAULT_TEMPLATE;  // Changed this line
     }
     
+    initVisitCounter();
     updateEditorInfo();
     saveState();
     
@@ -994,6 +995,7 @@ window.addEventListener('load', () => {
     }
     
     console.log('Micron Editor initialized');
+    initVisitCounter();
 });
 
 // Floating Toolbar and Color Modal Functions
@@ -2150,4 +2152,49 @@ function insertDividerCode(code) {
     saveState();
     closeModal();
     setStatus('Divider inserted');
+}
+
+
+
+async function initVisitCounter() {
+    const counterElement = document.getElementById('visit-counter');
+    const sinceElement = document.getElementById('visit-since');
+    
+    // Check if running locally (file://) or on a server
+    const isLocal = window.location.protocol === 'file:';
+    
+    if (isLocal) {
+        // Use localStorage for local testing
+        let localCount = localStorage.getItem('micronLocalVisits') || 0;
+        localCount = parseInt(localCount) + 1;
+        localStorage.setItem('micronLocalVisits', localCount);
+        
+        if (counterElement) {
+            counterElement.textContent = localCount.toLocaleString() + ' (local)';
+        }
+    } else {
+        // Use global API when deployed
+        try {
+            const namespace = 'micron-composer';
+            const key = 'page-visits';
+            const response = await fetch(`https://counterapi.dev/api/v1/${namespace}/${key}/up`);
+            
+            if (!response.ok) throw new Error('API error');
+            
+            const data = await response.json();
+            
+            if (counterElement && data.count !== undefined) {
+                counterElement.textContent = data.count.toLocaleString();
+            }
+        } catch (error) {
+            console.error('Counter error:', error);
+            if (counterElement) {
+                counterElement.textContent = '---';
+            }
+        }
+    }
+    
+    if (sinceElement) {
+        sinceElement.textContent = '2025-01-20';
+    }
 }
