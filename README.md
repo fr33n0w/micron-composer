@@ -58,6 +58,15 @@ Micron Page Composer is a web-based, visual editor that makes it easy to create 
 
 ## 🚀 Quick Start
 
+###
+
+Use it online on github at:
+
+https://fr33n0w.github.io/micron-composer/
+
+
+or you can download and use it locally following the instructions below.
+
 ### Installation
 
 1. **Clone the repository:**
@@ -68,10 +77,10 @@ cd micron-composer
 
 2. **Open in browser:**
 ```bash
-# Simply open composer.html in your web browser
+# Simply open index.html in your web browser
 # Or use a local server (recommended):
 python -m http.server 8000
-# Then navigate to http://localhost:8000/composer.html
+# Then navigate to http://localhost:8000/index.html
 ```
 
 ### Usage
@@ -149,6 +158,12 @@ python -m http.server 8000
 ```
 
 ## 🛠️ Technical Details
+
+This is a first release beta version, so could have some bugs, 
+in case open a gihtub issue or contact the developer at lxmf address:
+
+0d051f3b6f844380c3e0c5d14e37fac8
+
 
 ### Built With
 - **HTML5/CSS3/JavaScript** - Core technologies
