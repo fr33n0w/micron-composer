@@ -2153,47 +2153,16 @@ function insertDividerCode(code) {
     setStatus('Divider inserted');
 }
 
-async function initVisitCounter() {
-    const counterElement = document.getElementById('visit-counter');
+function initVisitCounter() {
     const sinceElement = document.getElementById('visit-since');
-    
-    // Check if running locally
-    const isLocal = window.location.protocol === 'file:';
-    
-    if (isLocal) {
-        // Use localStorage for local testing
-        let localCount = localStorage.getItem('micronLocalVisits') || 0;
-        localCount = parseInt(localCount) + 1;
-        localStorage.setItem('micronLocalVisits', localCount);
-        
-        if (counterElement) {
-            counterElement.textContent = localCount.toLocaleString() + ' (local)';
-        }
-    } else {
-        // Use CountAPI.xyz when deployed
-        try {
-            const response = await fetch('https://api.countapi.xyz/hit/fr33n0w-micron-composer/visits');
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const data = await response.json();
-            console.log('Counter data:', data);
-            
-            if (counterElement && data.value !== undefined) {
-                counterElement.textContent = data.value.toLocaleString();
-            }
-        } catch (error) {
-            console.error('Counter error:', error);
-            if (counterElement) {
-                counterElement.textContent = 'Unavailable';
-            }
-        }
-    }
     
     if (sinceElement) {
         sinceElement.textContent = '2025-01-20';
     }
+    
+    // Remove or hide the counter element since we're using the badge
+    const counterElement = document.getElementById('visit-counter');
+    if (counterElement) {
+        counterElement.style.display = 'none';
+    }
 }
-
