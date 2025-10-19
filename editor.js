@@ -2154,15 +2154,11 @@ function insertDividerCode(code) {
 }
 
 function initVisitCounter() {
+    // Badge handles the counter automatically
+    // Just set the "since" date if needed
     const sinceElement = document.getElementById('visit-since');
-    
     if (sinceElement) {
         sinceElement.textContent = '2025-01-20';
     }
-    
-    // Remove or hide the counter element since we're using the badge
-    const counterElement = document.getElementById('visit-counter');
-    if (counterElement) {
-        counterElement.style.display = 'none';
-    }
 }
+
