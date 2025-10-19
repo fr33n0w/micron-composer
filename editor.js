@@ -2154,13 +2154,11 @@ function insertDividerCode(code) {
     setStatus('Divider inserted');
 }
 
-
-
 async function initVisitCounter() {
     const counterElement = document.getElementById('visit-counter');
     const sinceElement = document.getElementById('visit-since');
     
-    // Check if running locally (file://) or on a server
+    // Check if running locally
     const isLocal = window.location.protocol === 'file:';
     
     if (isLocal) {
@@ -2173,23 +2171,24 @@ async function initVisitCounter() {
             counterElement.textContent = localCount.toLocaleString() + ' (local)';
         }
     } else {
-        // Use global API when deployed
+        // Use CountAPI.xyz when deployed
         try {
-            const namespace = 'micron-composer';
-            const key = 'page-visits';
-            const response = await fetch(`https://counterapi.dev/api/v1/${namespace}/${key}/up`);
+            const response = await fetch('https://api.countapi.xyz/hit/fr33n0w-micron-composer/visits');
             
-            if (!response.ok) throw new Error('API error');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
             
             const data = await response.json();
+            console.log('Counter data:', data);
             
-            if (counterElement && data.count !== undefined) {
-                counterElement.textContent = data.count.toLocaleString();
+            if (counterElement && data.value !== undefined) {
+                counterElement.textContent = data.value.toLocaleString();
             }
         } catch (error) {
             console.error('Counter error:', error);
             if (counterElement) {
-                counterElement.textContent = '---';
+                counterElement.textContent = 'Unavailable';
             }
         }
     }
