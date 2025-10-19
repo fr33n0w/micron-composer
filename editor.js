@@ -975,7 +975,6 @@ window.addEventListener('load', () => {
     window.openLinkDialog = openLinkDialog;
     window.openEmojiDialog = openEmojiDialog;
     window.showHelp = showHelp;
-    window.applyColor = applyColor;
     window.applyLink = applyLink;
     window.closeModal = closeModal;
     window.switchMainTab = switchMainTab;
@@ -2197,3 +2196,4 @@ async function initVisitCounter() {
         sinceElement.textContent = '2025-01-20';
     }
 }
+
