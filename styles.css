@@ -1,0 +1,1275 @@
+* { 
+    box-sizing: border-box; 
+}
+
+body { 
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+    background: #0d1117; 
+    color: #e6edf3; 
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+.container { 
+    max-width: 1300px;
+    margin: 0 auto; 
+}
+
+h1 {
+    color: #58a6ff;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.subtitle {
+    text-align: center;
+    color: #7d8590;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+/* Integrated Panel Wrapper */
+.integrated-panel {
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Status Bar */
+.status-bar {
+    background: #21262d;
+    padding: 10px 16px;
+    font-size: 13px;
+    color: #7d8590;
+    text-align: center;
+    border-bottom: 1px solid #30363d;
+}
+
+/* Action Bar */
+.action-bar {
+    display: flex;
+    gap: 6px;
+    padding: 10px 14px;
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
+    flex-wrap: wrap;
+}
+
+.btn {
+    background: #0969da;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.btn:hover { 
+    background: #1f6feb; 
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn.active {
+    background: #1f6feb;
+    border: 1px solid #58a6ff;
+}
+
+.btn-success { 
+    background: #238636; 
+}
+
+.btn-success:hover { 
+    background: #2ea043; 
+}
+
+.btn-warning { 
+    background: #fb8500; 
+}
+
+.btn-warning:hover { 
+    background: #ff9500; 
+}
+
+.btn-danger {
+    background: #da3633;
+}
+
+.btn-danger:hover {
+    background: #ff4444;
+}
+
+/* Main Tabs */
+.main-tabs {
+    display: flex;
+    gap: 4px;
+    background: #0d1117;
+    padding: 8px 16px;
+    border: 1px solid #30363d;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+}
+
+.main-tab {
+    padding: 10px 24px;
+    background: #21262d;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #7d8590;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.main-tab:hover {
+    background: #30363d;
+    color: #e6edf3;
+}
+
+.main-tab.active {
+    background: #161b22;
+    color: #58a6ff;
+    border-color: #58a6ff;
+}
+
+/* Main Panels */
+.main-panel {
+    display: none;
+    background: #161b22;
+}
+
+.main-panel.active {
+    display: block;
+}
+
+/* Toolbar */
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px;
+    background: #0d1117;
+    border-bottom: 1px solid #30363d;
+}
+
+.toolbar-group {
+    display: flex;
+    gap: 3px;
+    padding-right: 5px;
+    border-right: 1px solid #30363d;
+}
+
+.toolbar-group:last-child {
+    border-right: none;
+}
+
+.tool-btn {
+    background: #21262d;
+    color: #e6edf3;
+    border: 1px solid #30363d;
+    padding: 8px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.tool-btn:hover {
+    background: #30363d;
+    border-color: #58a6ff;
+}
+
+.tool-btn:active {
+    background: #1f6feb;
+    transform: scale(0.95);
+}
+
+/* Editor Wrapper */
+.editor-wrapper {
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+.text-editor {
+    flex: 1;
+    width: 100%;
+    background: #0d1117;
+    color: #e6edf3;
+    border: none;
+    padding: 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+    overflow-y: auto;
+}
+
+.text-editor::placeholder {
+    color: #7d8590;
+}
+
+/* Code Wrapper */
+.code-wrapper {
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+.micron-editor {
+    flex: 1;
+    width: 100%;
+    background: #0d1117;
+    color: #e6edf3;
+    border: none;
+    padding: 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    resize: none;
+    outline: none;
+    overflow-y: auto;
+}
+
+/* Preview Wrapper */
+.preview-wrapper {
+    height: 600px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #0d1117;
+}
+
+.preview-content {
+    padding: 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 15px;
+    line-height: 1.0;
+    color: #e6edf3;
+    width: 1170px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+.preview-content div {
+    margin: 4px 0;
+    line-height: 1.0;
+}
+
+.preview-content br {
+    line-height: 1.0;
+}
+
+/* Character Counter */
+.char-counter {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 16px;
+    background: #21262d;
+    border-top: 1px solid #30363d;
+    font-size: 12px;
+    color: #7d8590;
+}
+
+/* Action Bar */
+.action-bar {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.btn {
+    background: #0969da;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.btn:hover { 
+    background: #1f6feb; 
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-success { 
+    background: #238636; 
+}
+
+.btn-success:hover { 
+    background: #2ea043; 
+}
+
+.btn-warning { 
+    background: #fb8500; 
+}
+
+.btn-warning:hover { 
+    background: #ff9500; 
+}
+
+.btn-danger {
+    background: #da3633;
+}
+
+.btn-danger:hover {
+    background: #ff4444;
+}
+
+/* Status Bar */
+.status-bar {
+    background: #21262d;
+    padding: 10px 16px;
+    font-size: 13px;
+    color: #7d8590;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; 
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.active { 
+    display: flex; 
+}
+
+.modal-content {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 24px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-large {
+    max-width: 700px;
+}
+
+.modal-header {
+    color: #58a6ff;
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #e6edf3;
+    font-size: 13px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 4px;
+    color: #e6edf3;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #58a6ff;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+/* Help Content */
+.help-content {
+    line-height: 1.8;
+}
+
+.help-content h3 {
+    color: #58a6ff;
+    margin: 20px 0 10px 0;
+    font-size: 16px;
+}
+
+.help-content h3:first-child {
+    margin-top: 0;
+}
+
+.help-content code {
+    display: block;
+    background: #0d1117;
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin: 6px 0;
+    color: #ffa657;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+}
+
+/* Color Palette */
+.color-palette {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.color-swatch {
+    width: 100%;
+    height: 40px;
+    border: 2px solid #30363d;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.color-swatch:hover {
+    border-color: #58a6ff;
+    transform: scale(1.1);
+}
+
+.color-swatch:active {
+    transform: scale(0.95);
+}
+
+/* Emoji Picker */
+.emoji-categories {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.emoji-cat-btn {
+    padding: 8px 16px;
+    background: #21262d;
+    border: 1px solid #30363d;
+    border-radius: 4px;
+    color: #7d8590;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.emoji-cat-btn:hover {
+    background: #30363d;
+    color: #e6edf3;
+}
+
+.emoji-cat-btn.active {
+    background: #1f6feb;
+    border-color: #58a6ff;
+    color: #fff;
+}
+
+.emoji-grid {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.emoji-category {
+    display: none;
+}
+
+.emoji-category.active {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 8px;
+}
+
+.emoji-item {
+    font-size: 28px;
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.emoji-item:hover {
+    background: #30363d;
+    transform: scale(1.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .toolbar {
+        gap: 4px;
+        padding: 8px;
+    }
+    
+    .tool-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    
+    .action-bar {
+        gap: 6px;
+        padding: 12px;
+    }
+    
+    .btn {
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+}
+
+/* Floating Toolbar */
+.floating-toolbar {
+    position: fixed;
+    background: #2a2a2a;
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 8px;
+    display: none;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    flex-direction: column;
+    gap: 5px;
+    pointer-events: auto;
+}
+
+.floating-toolbar.show {
+    display: flex;
+}
+
+.floating-row {
+    display: flex;
+    gap: 5px;
+    flex-wrap: nowrap;
+}
+
+.floating-tool-btn {
+    background: #3a3a3a;
+    border: 1px solid #555;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.floating-tool-btn:hover {
+    background: #4a4a4a;
+    border-color: #4a9eff;
+}
+
+.floating-tool-btn b,
+.floating-tool-btn i,
+.floating-tool-btn u {
+    font-size: 14px;
+}
+
+/* Unified Color Modal Tabs */
+.color-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #444;
+}
+
+.color-tab-btn {
+    padding: 10px 20px;
+    background: #2a2a2a;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+    border-radius: 5px 5px 0 0;
+    transition: all 0.3s;
+}
+
+.color-tab-btn.active {
+    background: #3a3a3a;
+    color: #fff;
+    border-bottom: 2px solid #4a9eff;
+}
+
+.color-tab-btn:hover {
+    background: #3a3a3a;
+}
+
+.color-section {
+    display: none;
+}
+
+.color-section.active {
+    display: block;
+}
+
+/* Color Preview */
+.color-preview {
+    margin: 15px 0;
+    padding: 15px;
+    background: #2a2a2a;
+    border-radius: 5px;
+    border: 1px solid #444;
+}
+
+.color-preview-label {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 5px;
+}
+
+.color-preview-box {
+    padding: 10px;
+    border-radius: 3px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.btn-separator {
+    width: 1px;
+    background: #30363d;
+    margin: 0 8px;
+    align-self: stretch;
+}
+
+/* Tab buttons styling - only buttons with tab-btn class */
+.action-bar .tab-btn {
+    background: #30363d;
+    color: #7d8590;
+}
+
+.action-bar .tab-btn.active {
+    background: #0969da;
+    color: #fff;
+    border: 1px solid #1f6feb;
+}
+
+.action-bar .tab-btn:hover {
+    background: #21262d;
+}
+
+.action-bar .tab-btn.active:hover {
+    background: #1f6feb;
+}
+/* Floating Toolbar */
+.editor-wrapper {
+    position: relative;
+}
+
+.floating-toolbar {
+    position: fixed;
+    background: #2a2a2a;
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 8px;
+    display: none;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    gap: 5px;
+    flex-wrap: nowrap;
+    pointer-events: auto;
+}
+
+.floating-toolbar.show {
+    display: flex;
+}
+
+.floating-tool-btn {
+    background: #3a3a3a;
+    border: 1px solid #555;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.floating-tool-btn:hover {
+    background: #4a4a4a;
+    border-color: #4a9eff;
+}
+
+.floating-tool-btn b,
+.floating-tool-btn i,
+.floating-tool-btn u {
+    font-size: 14px;
+}
+
+/* Unified Color Modal Tabs */
+.color-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #444;
+}
+
+.color-tab-btn {
+    padding: 10px 20px;
+    background: #2a2a2a;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+    border-radius: 5px 5px 0 0;
+    transition: all 0.3s;
+}
+
+.color-tab-btn.active {
+    background: #3a3a3a;
+    color: #fff;
+    border-bottom: 2px solid #4a9eff;
+}
+
+.color-tab-btn:hover {
+    background: #3a3a3a;
+}
+
+.color-section {
+    display: none;
+}
+
+.color-section.active {
+    display: block;
+}
+
+/* Color Preview */
+.color-preview {
+    margin: 15px 0;
+    padding: 15px;
+    background: #2a2a2a;
+    border-radius: 5px;
+    border: 1px solid #444;
+}
+
+.color-preview-label {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 5px;
+}
+
+.color-preview-box {
+    padding: 10px;
+    border-radius: 3px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* ASCII Picker */
+.ascii-categories {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.ascii-cat-btn {
+    padding: 8px 16px;
+    background: #21262d;
+    border: 1px solid #30363d;
+    border-radius: 4px;
+    color: #7d8590;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.ascii-cat-btn:hover {
+    background: #30363d;
+    color: #e6edf3;
+}
+
+.ascii-cat-btn.active {
+    background: #1f6feb;
+    border-color: #58a6ff;
+    color: #fff;
+}
+
+.ascii-grid {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.ascii-category {
+    display: none;
+}
+
+.ascii-category.active {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 8px;
+}
+
+.ascii-item {
+    font-size: 24px;
+    font-family: monospace;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+    border: 1px solid #30363d;
+    transition: all 0.2s;
+    background: #21262d;
+}
+
+.ascii-item:hover {
+    background: #30363d;
+    transform: scale(1.15);
+    border-color: #58a6ff;
+}
+
+/* Fix checkbox alignment in modals */
+.modal .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #e6edf3;
+    font-size: 13px;
+}
+
+.modal .form-group label input[type="checkbox"] {
+    margin-right: 8px;
+    vertical-align: middle;
+    display: inline;
+}
+
+.modal .form-group label:has(input[type="checkbox"]) {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* Checkbox wrapper for proper alignment */
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+    margin: 0;
+    cursor: pointer;
+}
+
+.checkbox-wrapper label {
+    margin: 0;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Checkbox wrapper - force correct alignment */
+.modal .checkbox-wrapper {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin: 0 !important;
+}
+
+.modal .checkbox-wrapper input[type="checkbox"] {
+    margin: 0 !important;
+    cursor: pointer;
+    width: auto !important;
+    padding: 0 !important;
+}
+
+.modal .checkbox-wrapper label {
+    margin: 0 !important;
+    cursor: pointer;
+    user-select: none;
+    display: inline !important;
+    width: auto !important;
+}
+
+/* Make edit tab same height as other tabs by reducing editor height */
+#edit-tab .editor-wrapper {
+    height: 550px;
+}
+
+#edit-tab .text-editor {
+    height: 100%;
+}
+
+/* Change cursor to arrow in code viewer (read-only) */
+.micron-editor[readonly] {
+    cursor: default;
+}
+
+/* Reduce toolbar height - remove extra space above buttons */
+.toolbar {
+    min-height: 40px;
+    max-height: 50px;
+    gap: 6px;
+}
+
+.tool-btn {
+    padding: 6px 12px;
+    font-size: 14px;
+}
+
+/* Reduce line spacing in preview for better ASCII art rendering */
+.preview-content {
+    padding: 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    line-height: 1.0; /* Reduced from 1.3 to 1.0 for tighter spacing */
+    color: #e6edf3;
+    width: 1170px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+.preview-content div {
+    margin: 0; /* Remove margins from divs */
+    line-height: 1.0; /* Ensure divs also have tight spacing */
+    width: 1260px;
+}
+
+.preview-content br {
+    line-height: 1.0; /* Reduced from 1.2 */
+    width: 1260px;
+}
+
+/* Make all floating toolbar buttons consistent size */
+.floating-tool-btn {
+    background: #3a3a3a;
+    border: 1px solid #555;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+    white-space: nowrap;
+    min-width: 40px; /* Ensures consistent minimum width */
+    text-align: center; /* Centers content */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.floating-tool-btn:hover {
+    background: #4a4a4a;
+    border-color: #4a9eff;
+}
+
+.floating-tool-btn b,
+.floating-tool-btn i,
+.floating-tool-btn u {
+    font-size: 14px;
+}
+
+/* Action Bar */
+.action-bar {
+    display: flex;
+    gap: 6px;
+    padding: 10px 14px;
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
+    flex-wrap: wrap;
+}
+
+/* External Preview button - grey with blue hover */
+.action-bar button[onclick="openExternalPreview()"] {
+    background: #30363d !important;
+    color: #e6edf3 !important;
+}
+
+.action-bar button[onclick="openExternalPreview()"]:hover {
+    background: #0969da !important;
+    color: #fff !important;
+}
+
+/* Browser compatibility - normalize rendering */
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0d1117;
+    color: #e6edf3;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+    /* Force consistent sizing */
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+/* Ensure consistent button sizing across browsers */
+.btn, .tool-btn, .floating-tool-btn {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+}
+
+/* Force consistent textarea and input sizing */
+textarea, input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+}
+
+/* Ensure monospace fonts render consistently */
+.text-editor, .micron-editor, .preview-content {
+    font-family: 'Courier New', 'Courier', monospace;
+    font-size: 15px;
+    /* Force consistent line height */
+    line-height: 1.0;
+}
+
+/* Chrome-specific fix for monospace font rendering */
+@supports (-webkit-appearance: none) {
+    .preview-content {
+        width: 1300px; /* Increase width for Chrome (was 1170px) */
+    }
+    
+    .text-editor, .micron-editor {
+        width: calc(100% + 10px); /* Slightly wider in Chrome */
+    }
+}
+
+/* Firefox gets the original width */
+@-moz-document url-prefix() {
+    .preview-content {
+        width: 1170px;
+    }
+}
+/* Force exact 130 character width across all browsers */
+.preview-content {
+    width: 135ch; /* Add extra characters for Chrome's rendering */
+    max-width: none; /* Don't limit width */
+    padding: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 15px;
+    line-height: 1.0;
+    color: #e6edf3;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    box-sizing: content-box; /* Don't include padding in width calculation */
+}
+
+/* Also update the wrapper */
+.preview-wrapper {
+    height: 600px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #0d1117;
+    box-sizing: border-box;
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    cursor: pointer;
+}
+
+.checkbox-wrapper label {
+    cursor: pointer;
+    margin: 0;
+}
+
+.form-group {
+    position: relative;
+    z-index: 1;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+    position: relative;
+    z-index: 2;
+    opacity: 1;
+    appearance: auto;
+    -webkit-appearance: checkbox;
+}
+
+#help-modal .help-content code {
+    white-space: nowrap;
+    display: inline-block;
+}
+
+#help-modal .help-content {
+    overflow-x: auto;
+}
+
+/* Ensure all toolbar buttons have consistent styling */
+.tool-btn {
+    background: #21262d;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+}
+
+.tool-btn:hover {
+    background: #30363d;
+    border-color: #58a6ff;
+    color: #58a6ff;
+}
+
+.tool-btn:active {
+    background: #1c2128;
+    transform: scale(0.98);
+}
+
+/* Fix specific button styling */
+button[onclick*="closeAlignment"] {
+    background: #21262d !important;
+    color: #c9d1d9 !important;
+}
+
+.tool-btn {
+    font-size: 13px;  /* Reduced from 13px */
+    padding: 6px 10px;  /* Reduced from 8px 12px */
+}
+
+/* Make form inputs visible in preview */
+#preview-content input[type="checkbox"],
+#preview-content input[type="radio"],
+.preview-content input[type="checkbox"],
+.preview-content input[type="radio"] {
+    appearance: auto;
+    -webkit-appearance: auto;
+    -moz-appearance: auto;
+    width: 16px;
+    height: 16px;
+    opacity: 1;
+    position: relative;
+    display: inline-block;
+    margin: 0 4px 0 0;
+    cursor: pointer;
+    z-index: 999;
+}
+
+#preview-content label,
+.preview-content label {
+    display: inline-block;
+    cursor: pointer;
+    margin: 4px 0;
+}
+
+#preview-content input[type="text"],
+#preview-content input[type="password"],
+.preview-content input[type="text"],
+.preview-content input[type="password"] {
+    background: #21262d;
+    border: 1px solid #30363d;
+    color: #e6edf3;
+    padding: 4px 8px;
+    font-family: 'Courier New', monospace;
+    opacity: 1;
+    display: inline-block;
+}
+
+/* Divider Picker Styles */
+.divider-picker {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    padding: 15px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.divider-item {
+    background: #21262d;
+    border: 2px solid #30363d;
+    border-radius: 6px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.divider-item:hover {
+    border-color: #58a6ff;
+    background: #2d333b;
+    transform: translateY(-2px);
+}
+
+.divider-preview {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    color: #58a6ff;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-bottom: 8px;
+    padding: 8px;
+    background: #161b22;
+    border-radius: 4px;
+}
+
+.divider-label {
+    font-size: 12px;
+    color: #8b949e;
+    font-weight: 500;
+}
+
+.divider-item:hover .divider-label {
+    color: #58a6ff;
+}

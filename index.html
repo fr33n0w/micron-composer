@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎨 Micron Page Composer v1.0 - WYSIWYG .mu NomadNet Page Editor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Micron Page Composer v1.0</h1>
+        <div class="subtitle">WYSIWYG Micron Editor - Easily Create NomadNet-Ready .mu Pages. - Interactive Micron Learning Tool - Keep lines under 130 chars for MeshChat compatibility. Best with FireFox browser.<div>
+        
+        <div class="integrated-panel">
+            <div class="status-bar">
+                <span id="status-msg">Micron Composer Ready</span>
+            </div>
+            
+            <div class="action-bar">
+                <button class="btn tab-btn active" onclick="switchMainTab('edit')" title="Edit your page content with visual formatting tools">✏️ Micron Editor</button>
+                <button class="btn tab-btn" onclick="switchMainTab('preview')" title="Preview how your page will look when rendered">👁️ Page Preview</button>
+                <button class="btn tab-btn" onclick="switchMainTab('code')" title="View the raw Micron markup code">📝 Code Viewer</button>
+                <button class="btn" onclick="openExternalPreview()" title="Open micron page preview in external window, MeshChat rendering format output">⧉</button>
+                <div class="btn-separator"></div>
+                <button class="btn" onclick="newPage()" title="Create a new page with default demo template">📄 Start New Page</button>    
+                <button class="btn btn-warning" onclick="loadFromMicron()" title="Remove all Micron formatting codes to get plain text">✂️ Strip Codes</button>
+                <button class="btn btn-danger" onclick="clearAll()" title="Reset and Delete all page content from editor">🗑️ Clear page</button>
+                <div class="btn-separator"></div>
+                <button class="btn" onclick="copyMicron()" title="Copy the full Micron coded page to clipboard">📋 Copy Page Code</button>
+                <button class="btn btn-success" onclick="downloadMicron()" title="Download your page as a .mu file ready for NomadNet hosting">💾 Export file</button>
+            </div>
+            
+            <div class="main-panel active" id="edit-tab">
+                <div class="toolbar">
+                    <div class="toolbar-group">
+                        <button class="tool-btn" onclick="insertHeader(1)" title="Insert Header Level 1 (>)">H1</button>
+                        <button class="tool-btn" onclick="insertHeader(2)" title="Insert Header Level 2 (>>)">H2</button>
+                        <button class="tool-btn" onclick="insertHeader(3)" title="Insert Header Level 3 (>>>)">H3</button>
+                    </div>
+                    <div class="toolbar-group">
+                        <button class="tool-btn" onclick="formatText('bold')" title="Make selected text bold `!text`! (Ctrl+B)"><b>B</b></button>
+                        <button class="tool-btn" onclick="formatText('italic')" title="Make selected text italic `*text`* (Ctrl+I)"><i>I</i></button>
+                        <button class="tool-btn" onclick="formatText('underline')" title="Underline selected text `_text`_ (Ctrl+U)"><u>U</u></button>
+                    </div>
+                    <div class="toolbar-group">
+                        <button class="tool-btn" onclick="openUnifiedColorDialog()" title="Change selected text and background colors">🎨 Colors</button>
+                    </div>
+                    <div class="toolbar-group">
+                        <button class="tool-btn" onclick="alignText('center')" title="Center align `c text">⬌ `c</button>
+                        <button class="tool-btn" onclick="alignText('left')" title="Left align `l text">◀ `l</button>
+                        <button class="tool-btn" onclick="alignText('right')" title="Right align `r text">▶ `r</button>
+                        <button class="tool-btn" onclick="floatingCloseAlignment()" title="Close Alignment">🔚 `a</button>
+                    </div>
+                    <div class="toolbar-group">
+                        <button class="tool-btn" onclick="openLinkDialog()" title="Insert hyperlink `[text`url]`">🔗 Link</button>
+                        <button class="tool-btn" onclick="openFieldDialog()" title="Insert input field for sending user data">📝 Field</button>
+                        <button class="tool-btn" onclick="openRadioDialog()" title="Insert radio button for user options">🔘 Radio</button>
+                        <button class="tool-btn" onclick="openCheckboxDialog()" title="Insert checkbox for user options">☑️ Checkbox</button>
+                    </div>
+                    <div class="toolbar-group">
+                        <button class="tool-btn" onclick="openDividerDialog()" title="Insert horizontal divider line">─ Divider</button>
+                        <button class="tool-btn" onclick="openEmojiDialog()" title="Insert emoji characters">😊 Emoji</button>
+                        <button class="tool-btn" onclick="openAsciiDialog()" title="Insert ASCII art characters">🔣 ASCII</button>
+                    </div>
+                    <div class="toolbar-group">
+                        <button class="tool-btn" onclick="magicFormat()" title="Magic Auto-Format Page (experimental function!)">✨ Magic</button>
+                    </div>
+                    <div class="toolbar-group">
+                        <button class="tool-btn" onclick="showHelp()" title="Show Micron syntax reference guide">❓</button>
+                    </div>
+                </div>
+                
+                <div class="editor-wrapper">
+                    <textarea id="editor" class="text-editor" placeholder="Start typing your content here..." spellcheck="false"></textarea>
+                    <div class="char-counter">
+                        <span id="line-info">Line 1, Col 1</span>
+                        <span id="char-count">0 chars</span>
+                    </div>
+                    
+                    <!-- Floating Toolbar -->
+                    <div id="floating-toolbar" class="floating-toolbar">
+                        <div class="floating-row">
+                            <button class="floating-tool-btn" onclick="floatingFormatText('bold')" title="Bold"><b>B</b></button>
+                            <button class="floating-tool-btn" onclick="floatingFormatText('italic')" title="Italic"><i>I</i></button>
+                            <button class="floating-tool-btn" onclick="floatingFormatText('underline')" title="Underline"><u>U</u></button>
+                            <button class="floating-tool-btn" onclick="openUnifiedColorDialog()" title="Colors">🎨</button>
+                        </div>
+                        <div class="floating-row">
+                            <button class="floating-tool-btn" onclick="floatingAlignText('center')" title="Center">⬌</button>
+                            <button class="floating-tool-btn" onclick="openDividerDialog()" title="Divider">─</button>
+                            <button class="floating-tool-btn" onclick="openLinkDialog()" title="Link">🔗</button>
+                            <button class="floating-tool-btn" onclick="floatingMagicFormat()" title="Magic">✨</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="main-panel" id="code-tab">
+                <div class="code-wrapper">
+                    <textarea id="micron-output" class="micron-editor" placeholder="Micron code will appear here..." spellcheck="false" readonly></textarea>
+                    <div class="char-counter">
+                        <span id="micron-lines">0 lines</span>
+                        <span id="micron-chars">0 chars</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="main-panel" id="preview-tab">
+                <div class="preview-wrapper">
+                    <div id="preview-content" class="preview-content">
+                        Click "Preview" to see the rendered output
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Unified Color Dialog -->
+    <div id="unified-color-modal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">Choose Colors</div>
+            
+            <div class="color-tabs">
+                <button class="color-tab-btn active" onclick="switchColorTab('foreground')">🎨 Text Color</button>
+                <button class="color-tab-btn" onclick="switchColorTab('background')">🖌️ Background</button>
+            </div>
+            
+            <div class="color-section active" id="foreground-section">
+                <div class="form-group">
+                    <label>Quick Color Palette</label>
+                    <div class="color-palette" id="fg-palette">
+                        <div class="color-swatch" style="background: #fff; border: 1px solid #666;" data-color="fff"></div>
+                        <div class="color-swatch" style="background: #ccc;" data-color="ccc"></div>
+                        <div class="color-swatch" style="background: #999;" data-color="999"></div>
+                        <div class="color-swatch" style="background: #777;" data-color="777"></div>
+                        <div class="color-swatch" style="background: #333;" data-color="333"></div>
+                        <div class="color-swatch" style="background: #000;" data-color="000"></div>
+                        
+                        <div class="color-swatch" style="background: #f00;" data-color="f00"></div>
+                        <div class="color-swatch" style="background: #0f0;" data-color="0f0"></div>
+                        <div class="color-swatch" style="background: #00f;" data-color="00f"></div>
+                        <div class="color-swatch" style="background: #ff0;" data-color="ff0"></div>
+                        <div class="color-swatch" style="background: #f0f;" data-color="f0f"></div>
+                        <div class="color-swatch" style="background: #0ff;" data-color="0ff"></div>
+                        
+                        <div class="color-swatch" style="background: #f80;" data-color="f80"></div>
+                        <div class="color-swatch" style="background: #8f0;" data-color="8f0"></div>
+                        <div class="color-swatch" style="background: #08f;" data-color="08f"></div>
+                        <div class="color-swatch" style="background: #f08;" data-color="f08"></div>
+                        <div class="color-swatch" style="background: #80f;" data-color="80f"></div>
+                        <div class="color-swatch" style="background: #0f8;" data-color="0f8"></div>
+                        
+                        <div class="color-swatch" style="background: #a00;" data-color="a00"></div>
+                        <div class="color-swatch" style="background: #0a0;" data-color="0a0"></div>
+                        <div class="color-swatch" style="background: #00a;" data-color="00a"></div>
+                        <div class="color-swatch" style="background: #aa0;" data-color="aa0"></div>
+                        <div class="color-swatch" style="background: #a0a;" data-color="a0a"></div>
+                        <div class="color-swatch" style="background: #0aa;" data-color="0aa"></div>
+                        
+                        <div class="color-swatch" style="background: #fa0;" data-color="fa0"></div>
+                        <div class="color-swatch" style="background: #af0;" data-color="af0"></div>
+                        <div class="color-swatch" style="background: #0fa;" data-color="0fa"></div>
+                        <div class="color-swatch" style="background: #0af;" data-color="0af"></div>
+                        <div class="color-swatch" style="background: #a0f;" data-color="a0f"></div>
+                        <div class="color-swatch" style="background: #f0a;" data-color="f0a"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Custom color (3-digit hex)</label>
+                    <input type="text" id="fg-color-input" maxlength="3" placeholder="fff">
+                </div>
+            </div>
+            
+            <div class="color-section" id="background-section">
+                <div class="form-group">
+                    <label>Quick Color Palette</label>
+                    <div class="color-palette" id="bg-palette">
+                        <div class="color-swatch" style="background: #fff; border: 1px solid #666;" data-color="fff"></div>
+                        <div class="color-swatch" style="background: #ccc;" data-color="ccc"></div>
+                        <div class="color-swatch" style="background: #999;" data-color="999"></div>
+                        <div class="color-swatch" style="background: #666;" data-color="666"></div>
+                        <div class="color-swatch" style="background: #333;" data-color="333"></div>
+                        <div class="color-swatch" style="background: #000;" data-color="000"></div>
+                        
+                        <div class="color-swatch" style="background: #f00;" data-color="f00"></div>
+                        <div class="color-swatch" style="background: #0f0;" data-color="0f0"></div>
+                        <div class="color-swatch" style="background: #00f;" data-color="00f"></div>
+                        <div class="color-swatch" style="background: #ff0;" data-color="ff0"></div>
+                        <div class="color-swatch" style="background: #f0f;" data-color="f0f"></div>
+                        <div class="color-swatch" style="background: #0ff;" data-color="0ff"></div>
+                        
+                        <div class="color-swatch" style="background: #f80;" data-color="f80"></div>
+                        <div class="color-swatch" style="background: #8f0;" data-color="8f0"></div>
+                        <div class="color-swatch" style="background: #08f;" data-color="08f"></div>
+                        <div class="color-swatch" style="background: #f08;" data-color="f08"></div>
+                        <div class="color-swatch" style="background: #80f;" data-color="80f"></div>
+                        <div class="color-swatch" style="background: #0f8;" data-color="0f8"></div>
+                        
+                        <div class="color-swatch" style="background: #a00;" data-color="a00"></div>
+                        <div class="color-swatch" style="background: #0a0;" data-color="0a0"></div>
+                        <div class="color-swatch" style="background: #00a;" data-color="00a"></div>
+                        <div class="color-swatch" style="background: #aa0;" data-color="aa0"></div>
+                        <div class="color-swatch" style="background: #a0a;" data-color="a0a"></div>
+                        <div class="color-swatch" style="background: #0aa;" data-color="0aa"></div>
+                        
+                        <div class="color-swatch" style="background: #fa0;" data-color="fa0"></div>
+                        <div class="color-swatch" style="background: #af0;" data-color="af0"></div>
+                        <div class="color-swatch" style="background: #0fa;" data-color="0fa"></div>
+                        <div class="color-swatch" style="background: #0af;" data-color="0af"></div>
+                        <div class="color-swatch" style="background: #a0f;" data-color="a0f"></div>
+                        <div class="color-swatch" style="background: #f0a;" data-color="f0a"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Custom color (3-digit hex)</label>
+                    <input type="text" id="bg-color-input" maxlength="3" placeholder="333">
+                </div>
+            </div>
+            
+            <div class="color-preview">
+                <div class="color-preview-label">Preview:</div>
+                <div class="color-preview-box" id="color-preview-box" style="background: #333; color: #fff;">
+                    Sample Text
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn btn-success" onclick="applyColors()">Apply Colors</button>
+                <button class="btn btn-warning" onclick="closeColorModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+<!-- Link Dialog -->
+<div id="link-modal" class="modal">
+    <div class="modal-content modal-large">
+        <div class="modal-header">Insert Link</div>
+        <div class="form-group">
+            <label>Link Text</label>
+            <input type="text" id="link-text" placeholder="Click here">
+        </div>
+        <div class="form-group">
+            <label>URL or Path</label>
+            <input type="text" id="link-url" placeholder="/page/index.mu">
+        </div>
+        <div class="form-group">
+            <div class="checkbox-wrapper">
+                <input type="checkbox" id="link-bold">
+                <label for="link-bold">Bold link</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="checkbox-wrapper">
+                <input type="checkbox" id="link-underline">
+                <label for="link-underline">Underline link</label>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn" onclick="applyLink()">Insert</button>
+            <button class="btn btn-warning" onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Divider Picker Dialog -->
+<div id="divider-modal" class="modal">
+    <div class="modal-content modal-large">
+        <div class="modal-header">Insert Divider</div>
+        <div class="divider-picker">
+            <div class="divider-item" data-code="-" title="Simple horizontal line">
+                <div class="divider-preview">────────────────────────────────</div>
+                <div class="divider-label">Simple Line</div>
+            </div>
+            <div class="divider-item" data-code="--" title="Dash divider">
+                <div class="divider-preview">--------------------------------</div>
+                <div class="divider-label">Dashes</div>
+            </div>
+            <div class="divider-item" data-code="-_" title="Underscore divider">
+                <div class="divider-preview">________________________________</div>
+                <div class="divider-label">Underscores</div>
+            </div>
+            <div class="divider-item" data-code="-=" title="Equal signs divider">
+                <div class="divider-preview">================================</div>
+                <div class="divider-label">Equal Signs</div>
+            </div>
+            <div class="divider-item" data-code="-━" title="Heavy line divider">
+                <div class="divider-preview">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+                <div class="divider-label">Heavy Line</div>
+            </div>
+            <div class="divider-item" data-code="-═" title="Double line divider">
+                <div class="divider-preview">════════════════════════════════</div>
+                <div class="divider-label">Double Line</div>
+            </div>
+            <div class="divider-item" data-code="-∿" title="Wavy divider">
+                <div class="divider-preview">∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿</div>
+                <div class="divider-label">Wavy Line</div>
+            </div>
+            <div class="divider-item" data-code="-~" title="Tilde divider">
+                <div class="divider-preview">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>
+                <div class="divider-label">Tildes</div>
+            </div>
+            <div class="divider-item" data-code="-•" title="Bullet divider">
+                <div class="divider-preview">••••••••••••••••••••••••••••••••</div>
+                <div class="divider-label">Bullets</div>
+            </div>
+            <div class="divider-item" data-code="-★" title="Star divider">
+                <div class="divider-preview">★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★</div>
+                <div class="divider-label">Stars</div>
+            </div>
+            <div class="divider-item" data-code="-☆" title="White star divider">
+                <div class="divider-preview">☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆</div>
+                <div class="divider-label">White Stars</div>
+            </div>
+            <div class="divider-item" data-code="-◆" title="Diamond divider">
+                <div class="divider-preview">◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆</div>
+                <div class="divider-label">Diamonds</div>
+            </div>
+            <div class="divider-item" data-code="-◇" title="White diamond divider">
+                <div class="divider-preview">◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇</div>
+                <div class="divider-label">White Diamonds</div>
+            </div>
+            <div class="divider-item" data-code="-▬" title="Rectangle divider">
+                <div class="divider-preview">▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</div>
+                <div class="divider-label">Rectangles</div>
+            </div>
+            <div class="divider-item" data-code="-■" title="Square divider">
+                <div class="divider-preview">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■</div>
+                <div class="divider-label">Squares</div>
+            </div>
+            <div class="divider-item" data-code="-□" title="White square divider">
+                <div class="divider-preview">□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□</div>
+                <div class="divider-label">White Squares</div>
+            </div>
+            <div class="divider-item" data-code="-●" title="Circle divider">
+                <div class="divider-preview">●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●</div>
+                <div class="divider-label">Circles</div>
+            </div>
+            <div class="divider-item" data-code="-○" title="White circle divider">
+                <div class="divider-preview">○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○</div>
+                <div class="divider-label">White Circles</div>
+            </div>
+            <div class="divider-item" data-code="-▲" title="Triangle divider">
+                <div class="divider-preview">▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲</div>
+                <div class="divider-label">Triangles</div>
+            </div>
+            <div class="divider-item" data-code="-❖" title="Diamond star divider">
+                <div class="divider-preview">❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖</div>
+                <div class="divider-label">Diamond Stars</div>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-warning" onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+    
+    <!-- Help Dialog -->
+    <div id="help-modal" class="modal">
+        <div class="modal-content modal-large" style="width: 95%; max-width: 600px;">
+            <div class="modal-header">Micron Syntax Reference</div>
+            <div class="help-content">
+                <h3>Text Formatting</h3>
+                <code>`!Bold text`!</code> - Bold text<br>
+                <code>`*Italic text`*</code> - Italic text<br>
+                <code>`_Underlined text`_</code> - Underlined text<br>
+                <code>``</code> - Reset all formatting
+                
+                <h3>Colors</h3>
+                <code>`FxxxText`f</code> - Foreground (text) color (xxx = 3-digit hex)<br>
+                <code>`BxxxText`b</code> - Background color (xxx = 3-digit hex)<br>
+                <code>`Ff00Red text`f</code> - Example: Red text<br>
+                <code>`B0f0Green background`b</code> - Example: Green background<br>
+                <code>`Ff00`B0f0Colored text`b`f</code> - Both foreground and background
+                
+                <h3>Text Alignment</h3>
+                <code>`cCentered text`a</code> - Center align<br>
+                <code>`lLeft aligned text`a</code> - Left align<br>
+                <code>`rRight aligned text`a</code> - Right align<br>
+                <code>`a</code> - Reset to default alignment
+                
+                <h3>Headers</h3>
+                <code>>Header Level 1</code> - Main header<br>
+                <code>>>Header Level 2</code> - Subheader<br>
+                <code>>>>Header Level 3</code> - Sub-subheader<br>
+                <code><</code> - Reset section depth
+                
+                <h3>Links</h3>
+                <code>`[Link text`/path/to/page.mu]`</code> - Basic link<br>
+                <code>`[`destination.mu]`</code> - Link without custom text<br>
+                <code>`!`[Bold link`page.mu]`!`</code> - Bold link<br>
+                <code>`_`[Underlined link`page.mu]`_`</code> - Underlined link<br>
+                <code>`[Link`page.mu`field1|field2]`</code> - Link with form fields
+                
+                <h3>Input Fields</h3>
+                <code>`&lt;fieldname`default value></code> - Basic text field<br>
+                <code>`&lt;24|fieldname`default value></code> - Field with custom width (24 chars)<br>
+                <code>`&lt;!16|password`Enter password></code> - Masked password field<br>
+                <code>`&lt;?|checkbox|value`>Label text</code> - Checkbox<br>
+                <code>`&lt;?|checkbox|value|*`>Checked by default</code> - Pre-checked checkbox<br>
+                <code>`&lt;^|groupname|value`>Option 1</code> - Radio button<br>
+                <code>`&lt;^|groupname|value|*`>Selected option</code> - Pre-selected radio
+                
+                <h3>Horizontal Dividers</h3>
+                <code>-</code> - Standard horizontal line<br>
+                <code>-=</code> - Custom divider (repeats character after dash)<br>
+                <code>-━</code> - Example: Heavy line divider<br>
+                <code>-★</code> - Example: Star divider
+                
+                <h3>Literal Text Mode</h3>
+                <code>`=</code> - Toggle literal mode (display markup as-is)<br>
+                <code>\`=</code> - Escape literal toggle to display "`="
+                
+                <h3>Comments</h3>
+                <code># This is a comment</code> - Comments are not displayed
+                
+                <h3>Special Characters</h3>
+                <code>\`</code> - Escape backtick to display it literally<br>
+                <code>\\</code> - Escape backslash
+                
+                <h3>Combining Formatting</h3>
+                <code>`!`*Bold and italic`*`!</code> - Multiple formats<br>
+                <code>`Ff00`!Red bold text`!`f</code> - Color + bold<br>
+                <code>`c`Ff00`!Centered red bold`!`f`a</code> - Alignment + color + bold
+                
+                <h3>Color Examples</h3>
+                <code>fff</code> - White<br>
+                <code>000</code> - Black<br>
+                <code>f00</code> - Red<br>
+                <code>0f0</code> - Green<br>
+                <code>00f</code> - Blue<br>
+                <code>ff0</code> - Yellow<br>
+                <code>f0f</code> - Magenta<br>
+                <code>0ff</code> - Cyan<br>
+                <code>f80</code> - Orange<br>
+                <code>58a</code> - Light blue
+                
+                <h3>Tips</h3>
+                • Keep lines under 130 characters for MeshChat compatibility<br>
+                • Use `` to reset all formatting at once<br>
+                • Formatting codes can be nested but must be properly closed<br>
+                • Field names should be unique within a page<br>
+                • Radio buttons with the same group name are mutually exclusive
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Field Dialog -->
+    <div id="field-modal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">Insert Input Field</div>
+            <div class="form-group">
+                <label>Field Name</label>
+                <input type="text" id="field-name" placeholder="username">
+            </div>
+            <div class="form-group">
+                <label>Field Width (characters)</label>
+                <input type="number" id="field-width" placeholder="24" value="24" min="1" max="256">
+            </div>
+            <div class="form-group">
+                <label>Default Value</label>
+                <input type="text" id="field-value" placeholder="Enter text here">
+            </div>
+            <div class="form-group">
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="field-masked">
+                    <label for="field-masked">Password field (masked)</label>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="applyField()">Insert</button>
+                <button class="btn btn-warning" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Radio Dialog -->
+    <div id="radio-modal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">Insert Radio Button</div>
+            <div class="form-group">
+                <label>Group Name</label>
+                <input type="text" id="radio-group" placeholder="choice">
+            </div>
+            <div class="form-group">
+                <label>Value</label>
+                <input type="text" id="radio-value" placeholder="option1">
+            </div>
+            <div class="form-group">
+                <label>Label Text</label>
+                <input type="text" id="radio-label" placeholder="Option 1">
+            </div>
+            <div class="form-group">
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="radio-checked">
+                    <label for="radio-checked">Pre-checked</label>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="applyRadio()">Insert</button>
+                <button class="btn btn-warning" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkbox Dialog -->
+    <div id="checkbox-modal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">Insert Checkbox</div>
+            <div class="form-group">
+                <label>Field Name</label>
+                <input type="text" id="checkbox-field" placeholder="sign_up">
+            </div>
+            <div class="form-group">
+                <label>Value</label>
+                <input type="text" id="checkbox-value" placeholder="1">
+            </div>
+            <div class="form-group">
+                <label>Label Text</label>
+                <input type="text" id="checkbox-label" placeholder="Sign me up">
+            </div>
+            <div class="form-group">
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="checkbox-checked">
+                    <label for="checkbox-checked">Pre-checked</label>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="applyCheckbox()">Insert</button>
+                <button class="btn btn-warning" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Emoji Picker Dialog -->
+    <div id="emoji-modal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">Insert Emoji</div>
+            <div class="emoji-categories">
+                <button class="emoji-cat-btn active" onclick="showEmojiCategory('smileys')">😊 Smileys</button>
+                <button class="emoji-cat-btn" onclick="showEmojiCategory('symbols')">⚡ Symbols</button>
+                <button class="emoji-cat-btn" onclick="showEmojiCategory('objects')">🔧 Objects</button>
+                <button class="emoji-cat-btn" onclick="showEmojiCategory('nature')">🌿 Nature</button>
+            </div>
+            <div class="emoji-grid" id="emoji-grid">
+                <!-- Smileys Category -->
+                <div class="emoji-category active" data-category="smileys">
+                    <div class="emoji-item" data-emoji="😀">😀</div>
+                    <div class="emoji-item" data-emoji="😃">😃</div>
+                    <div class="emoji-item" data-emoji="😄">😄</div>
+                    <div class="emoji-item" data-emoji="😁">😁</div>
+                    <div class="emoji-item" data-emoji="😊">😊</div>
+                    <div class="emoji-item" data-emoji="😇">😇</div>
+                    <div class="emoji-item" data-emoji="🙂">🙂</div>
+                    <div class="emoji-item" data-emoji="🙃">🙃</div>
+                    <div class="emoji-item" data-emoji="😉">😉</div>
+                    <div class="emoji-item" data-emoji="😌">😌</div>
+                    <div class="emoji-item" data-emoji="😍">😍</div>
+                    <div class="emoji-item" data-emoji="🥰">🥰</div>
+                    <div class="emoji-item" data-emoji="😘">😘</div>
+                    <div class="emoji-item" data-emoji="😗">😗</div>
+                    <div class="emoji-item" data-emoji="😙">😙</div>
+                    <div class="emoji-item" data-emoji="😚">😚</div>
+                    <div class="emoji-item" data-emoji="😋">😋</div>
+                    <div class="emoji-item" data-emoji="😛">😛</div>
+                    <div class="emoji-item" data-emoji="😝">😝</div>
+                    <div class="emoji-item" data-emoji="😜">😜</div>
+                    <div class="emoji-item" data-emoji="🤪">🤪</div>
+                    <div class="emoji-item" data-emoji="🤨">🤨</div>
+                    <div class="emoji-item" data-emoji="🧐">🧐</div>
+                    <div class="emoji-item" data-emoji="🤓">🤓</div>
+                    <div class="emoji-item" data-emoji="😎">😎</div>
+                    <div class="emoji-item" data-emoji="🤩">🤩</div>
+                    <div class="emoji-item" data-emoji="🥳">🥳</div>
+                    <div class="emoji-item" data-emoji="😏">😏</div>
+                    <div class="emoji-item" data-emoji="😒">😒</div>
+                    <div class="emoji-item" data-emoji="😞">😞</div>
+                    <div class="emoji-item" data-emoji="😔">😔</div>
+                    <div class="emoji-item" data-emoji="😟">😟</div>
+                    <div class="emoji-item" data-emoji="😕">😕</div>
+                    <div class="emoji-item" data-emoji="🙁">🙁</div>
+                    <div class="emoji-item" data-emoji="☹️">☹️</div>
+                    <div class="emoji-item" data-emoji="😣">😣</div>
+                    <div class="emoji-item" data-emoji="😖">😖</div>
+                    <div class="emoji-item" data-emoji="😫">😫</div>
+                    <div class="emoji-item" data-emoji="😩">😩</div>
+                    <div class="emoji-item" data-emoji="🥺">🥺</div>
+                    <div class="emoji-item" data-emoji="😢">😢</div>
+                    <div class="emoji-item" data-emoji="😭">😭</div>
+                    <div class="emoji-item" data-emoji="😤">😤</div>
+                    <div class="emoji-item" data-emoji="😠">😠</div>
+                    <div class="emoji-item" data-emoji="😡">😡</div>
+                    <div class="emoji-item" data-emoji="🤬">🤬</div>
+                    <div class="emoji-item" data-emoji="🤯">🤯</div>
+                    <div class="emoji-item" data-emoji="😳">😳</div>
+                    <div class="emoji-item" data-emoji="🥵">🥵</div>
+                    <div class="emoji-item" data-emoji="🥶">🥶</div>
+                </div>
+                
+                <!-- Symbols Category -->
+                <div class="emoji-category" data-category="symbols">
+                    <div class="emoji-item" data-emoji="✅">✅</div>
+                    <div class="emoji-item" data-emoji="❌">❌</div>
+                    <div class="emoji-item" data-emoji="⭐">⭐</div>
+                    <div class="emoji-item" data-emoji="🌟">🌟</div>
+                    <div class="emoji-item" data-emoji="✨">✨</div>
+                    <div class="emoji-item" data-emoji="⚡">⚡</div>
+                    <div class="emoji-item" data-emoji="🔥">🔥</div>
+                    <div class="emoji-item" data-emoji="💧">💧</div>
+                    <div class="emoji-item" data-emoji="💯">💯</div>
+                    <div class="emoji-item" data-emoji="💢">💢</div>
+                    <div class="emoji-item" data-emoji="❤️">❤️</div>
+                    <div class="emoji-item" data-emoji="🧡">🧡</div>
+                    <div class="emoji-item" data-emoji="💛">💛</div>
+                    <div class="emoji-item" data-emoji="💚">💚</div>
+                    <div class="emoji-item" data-emoji="💙">💙</div>
+                    <div class="emoji-item" data-emoji="💜">💜</div>
+                    <div class="emoji-item" data-emoji="🖤">🖤</div>
+                    <div class="emoji-item" data-emoji="🤍">🤍</div>
+                    <div class="emoji-item" data-emoji="🤎">🤎</div>
+                    <div class="emoji-item" data-emoji="💔">💔</div>
+                    <div class="emoji-item" data-emoji="❣️">❣️</div>
+                    <div class="emoji-item" data-emoji="💕">💕</div>
+                    <div class="emoji-item" data-emoji="💖">💖</div>
+                    <div class="emoji-item" data-emoji="💗">💗</div>
+                    <div class="emoji-item" data-emoji="💘">💘</div>
+                    <div class="emoji-item" data-emoji="💝">💝</div>
+                    <div class="emoji-item" data-emoji="⚠️">⚠️</div>
+                    <div class="emoji-item" data-emoji="🚫">🚫</div>
+                    <div class="emoji-item" data-emoji="♻️">♻️</div>
+                    <div class="emoji-item" data-emoji="⚜️">⚜️</div>
+                    <div class="emoji-item" data-emoji="🎵">🎵</div>
+                    <div class="emoji-item" data-emoji="🎶">🎶</div>
+                    <div class="emoji-item" data-emoji="🎼">🎼</div>
+                    <div class="emoji-item" data-emoji="🎤">🎤</div>
+                    <div class="emoji-item" data-emoji="💬">💬</div>
+                    <div class="emoji-item" data-emoji="💭">💭</div>
+                    <div class="emoji-item" data-emoji="🗨️">🗨️</div>
+                    <div class="emoji-item" data-emoji="🔔">🔔</div>
+                    <div class="emoji-item" data-emoji="🔕">🔕</div>
+                    <div class="emoji-item" data-emoji="📢">📢</div>
+                    <div class="emoji-item" data-emoji="📣">📣</div>
+                    <div class="emoji-item" data-emoji="🔊">🔊</div>
+                    <div class="emoji-item" data-emoji="🔇">🔇</div>
+                    <div class="emoji-item" data-emoji="➡️">➡️</div>
+                    <div class="emoji-item" data-emoji="⬅️">⬅️</div>
+                    <div class="emoji-item" data-emoji="⬆️">⬆️</div>
+                    <div class="emoji-item" data-emoji="⬇️">⬇️</div>
+                    <div class="emoji-item" data-emoji="↗️">↗️</div>
+                    <div class="emoji-item" data-emoji="↘️">↘️</div>
+                    <div class="emoji-item" data-emoji="🔴">🔴</div>
+                </div>
+                
+                <!-- Objects Category -->
+                <div class="emoji-category" data-category="objects">
+                    <div class="emoji-item" data-emoji="💻">💻</div>
+                    <div class="emoji-item" data-emoji="🖥️">🖥️</div>
+                    <div class="emoji-item" data-emoji="⌨️">⌨️</div>
+                    <div class="emoji-item" data-emoji="🖱️">🖱️</div>
+                    <div class="emoji-item" data-emoji="🖨️">🖨️</div>
+                    <div class="emoji-item" data-emoji="💾">💾</div>
+                    <div class="emoji-item" data-emoji="💿">💿</div>
+                    <div class="emoji-item" data-emoji="📀">📀</div>
+                    <div class="emoji-item" data-emoji="📱">📱</div>
+                    <div class="emoji-item" data-emoji="📲">📲</div>
+                    <div class="emoji-item" data-emoji="☎️">☎️</div>
+                    <div class="emoji-item" data-emoji="📞">📞</div>
+                    <div class="emoji-item" data-emoji="📟">📟</div>
+                    <div class="emoji-item" data-emoji="📠">📠</div>
+                    <div class="emoji-item" data-emoji="📺">📺</div>
+                    <div class="emoji-item" data-emoji="📻">📻</div>
+                    <div class="emoji-item" data-emoji="🎙️">🎙️</div>
+                    <div class="emoji-item" data-emoji="🎚️">🎚️</div>
+                    <div class="emoji-item" data-emoji="🎛️">🎛️</div>
+                    <div class="emoji-item" data-emoji="🧭">🧭</div>
+                    <div class="emoji-item" data-emoji="⏱️">⏱️</div>
+                    <div class="emoji-item" data-emoji="⏰">⏰</div>
+                    <div class="emoji-item" data-emoji="⏲️">⏲️</div>
+                    <div class="emoji-item" data-emoji="🕰️">🕰️</div>
+                    <div class="emoji-item" data-emoji="⌚">⌚</div>
+                    <div class="emoji-item" data-emoji="⏳">⏳</div>
+                    <div class="emoji-item" data-emoji="⌛">⌛</div>
+                    <div class="emoji-item" data-emoji="🔋">🔋</div>
+                    <div class="emoji-item" data-emoji="🔌">🔌</div>
+                    <div class="emoji-item" data-emoji="💡">💡</div>
+                    <div class="emoji-item" data-emoji="🔦">🔦</div>
+                    <div class="emoji-item" data-emoji="🕯️">🕯️</div>
+                    <div class="emoji-item" data-emoji="🧯">🧯</div>
+                    <div class="emoji-item" data-emoji="🛢️">🛢️</div>
+                    <div class="emoji-item" data-emoji="🔧">🔧</div>
+                    <div class="emoji-item" data-emoji="🔨">🔨</div>
+                    <div class="emoji-item" data-emoji="⚙️">⚙️</div>
+                    <div class="emoji-item" data-emoji="🛠️">🛠️</div>
+                    <div class="emoji-item" data-emoji="⛏️">⛏️</div>
+                    <div class="emoji-item" data-emoji="🔩">🔩</div>
+                    <div class="emoji-item" data-emoji="⚔️">⚔️</div>
+                    <div class="emoji-item" data-emoji="🔫">🔫</div>
+                    <div class="emoji-item" data-emoji="🛡️">🛡️</div>
+                    <div class="emoji-item" data-emoji="🔒">🔒</div>
+                    <div class="emoji-item" data-emoji="🔓">🔓</div>
+                    <div class="emoji-item" data-emoji="🔑">🔑</div>
+                    <div class="emoji-item" data-emoji="🗝️">🗝️</div>
+                    <div class="emoji-item" data-emoji="🚪">🚪</div>
+                    <div class="emoji-item" data-emoji="🪟">🪟</div>
+                </div>
+                
+                <!-- Nature Category -->
+                <div class="emoji-category" data-category="nature">
+                    <div class="emoji-item" data-emoji="🌱">🌱</div>
+                    <div class="emoji-item" data-emoji="🌿">🌿</div>
+                    <div class="emoji-item" data-emoji="🍀">🍀</div>
+                    <div class="emoji-item" data-emoji="🍁">🍁</div>
+                    <div class="emoji-item" data-emoji="🍂">🍂</div>
+                    <div class="emoji-item" data-emoji="🍃">🍃</div>
+                    <div class="emoji-item" data-emoji="🌾">🌾</div>
+                    <div class="emoji-item" data-emoji="🌲">🌲</div>
+                    <div class="emoji-item" data-emoji="🌳">🌳</div>
+                    <div class="emoji-item" data-emoji="🌴">🌴</div>
+                    <div class="emoji-item" data-emoji="🌵">🌵</div>
+                    <div class="emoji-item" data-emoji="🌾">🌾</div>
+                    <div class="emoji-item" data-emoji="🌻">🌻</div>
+                    <div class="emoji-item" data-emoji="🌼">🌼</div>
+                    <div class="emoji-item" data-emoji="🌷">🌷</div>
+                    <div class="emoji-item" data-emoji="🌹">🌹</div>
+                    <div class="emoji-item" data-emoji="🥀">🥀</div>
+                    <div class="emoji-item" data-emoji="🌺">🌺</div>
+                    <div class="emoji-item" data-emoji="🌸">🌸</div>
+                    <div class="emoji-item" data-emoji="💐">💐</div>
+                    <div class="emoji-item" data-emoji="🏵️">🏵️</div>
+                    <div class="emoji-item" data-emoji="🌾">🌾</div>
+                    <div class="emoji-item" data-emoji="🍄">🍄</div>
+                    <div class="emoji-item" data-emoji="🌰">🌰</div>
+                    <div class="emoji-item" data-emoji="🐚">🐚</div>
+                    <div class="emoji-item" data-emoji="🪨">🪨</div>
+                    <div class="emoji-item" data-emoji="🌞">🌞</div>
+                    <div class="emoji-item" data-emoji="🌝">🌝</div>
+                    <div class="emoji-item" data-emoji="🌛">🌛</div>
+                    <div class="emoji-item" data-emoji="🌜">🌜</div>
+                    <div class="emoji-item" data-emoji="🌚">🌚</div>
+                    <div class="emoji-item" data-emoji="🌕">🌕</div>
+                    <div class="emoji-item" data-emoji="🌖">🌖</div>
+                    <div class="emoji-item" data-emoji="🌗">🌗</div>
+                    <div class="emoji-item" data-emoji="🌘">🌘</div>
+                    <div class="emoji-item" data-emoji="🌑">🌑</div>
+                    <div class="emoji-item" data-emoji="🌒">🌒</div>
+                    <div class="emoji-item" data-emoji="🌓">🌓</div>
+                    <div class="emoji-item" data-emoji="🌔">🌔</div>
+                    <div class="emoji-item" data-emoji="⭐">⭐</div>
+                    <div class="emoji-item" data-emoji="🌟">🌟</div>
+                    <div class="emoji-item" data-emoji="✨">✨</div>
+                    <div class="emoji-item" data-emoji="⚡">⚡</div>
+                    <div class="emoji-item" data-emoji="☄️">☄️</div>
+                    <div class="emoji-item" data-emoji="💫">💫</div>
+                    <div class="emoji-item" data-emoji="🌈">🌈</div>
+                    <div class="emoji-item" data-emoji="☀️">☀️</div>
+                    <div class="emoji-item" data-emoji="⛅">⛅</div>
+                    <div class="emoji-item" data-emoji="☁️">☁️</div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-warning" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ASCII Art Dialog -->
+    <div id="ascii-modal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">Insert ASCII Characters</div>
+            <div class="ascii-categories">
+                <button class="ascii-cat-btn active" onclick="showAsciiCategory('box')">📦 Box Drawing</button>
+                <button class="ascii-cat-btn" onclick="showAsciiCategory('lines')">─ Lines</button>
+                <button class="ascii-cat-btn" onclick="showAsciiCategory('dividers')">═ Dividers</button>
+                <button class="ascii-cat-btn" onclick="showAsciiCategory('arrows')">➔ Arrows</button>
+                <button class="ascii-cat-btn" onclick="showAsciiCategory('symbols')">★ Symbols</button>
+            </div>
+            <div class="ascii-grid" id="ascii-grid">
+                <!-- Box Drawing Category -->
+                <div class="ascii-category active" data-category="box">
+                    <div class="ascii-item" data-char="┌" title="Top-left corner">┌</div>
+                    <div class="ascii-item" data-char="┐" title="Top-right corner">┐</div>
+                    <div class="ascii-item" data-char="└" title="Bottom-left corner">└</div>
+                    <div class="ascii-item" data-char="┘" title="Bottom-right corner">┘</div>
+                    <div class="ascii-item" data-char="├" title="Left T">├</div>
+                    <div class="ascii-item" data-char="┤" title="Right T">┤</div>
+                    <div class="ascii-item" data-char="┬" title="Top T">┬</div>
+                    <div class="ascii-item" data-char="┴" title="Bottom T">┴</div>
+                    <div class="ascii-item" data-char="┼" title="Cross">┼</div>
+                    <div class="ascii-item" data-char="─" title="Horizontal">─</div>
+                    <div class="ascii-item" data-char="│" title="Vertical">│</div>
+                    <div class="ascii-item" data-char="━" title="Heavy horizontal">━</div>
+                    <div class="ascii-item" data-char="┃" title="Heavy vertical">┃</div>
+                    <div class="ascii-item" data-char="┏" title="Heavy top-left">┏</div>
+                    <div class="ascii-item" data-char="┓" title="Heavy top-right">┓</div>
+                    <div class="ascii-item" data-char="┗" title="Heavy bottom-left">┗</div>
+                    <div class="ascii-item" data-char="┛" title="Heavy bottom-right">┛</div>
+                    <div class="ascii-item" data-char="╔" title="Double top-left">╔</div>
+                    <div class="ascii-item" data-char="╗" title="Double top-right">╗</div>
+                    <div class="ascii-item" data-char="╚" title="Double bottom-left">╚</div>
+                    <div class="ascii-item" data-char="╝" title="Double bottom-right">╝</div>
+                    <div class="ascii-item" data-char="╠" title="Double left T">╠</div>
+                    <div class="ascii-item" data-char="╣" title="Double right T">╣</div>
+                    <div class="ascii-item" data-char="╦" title="Double top T">╦</div>
+                    <div class="ascii-item" data-char="╩" title="Double bottom T">╩</div>
+                    <div class="ascii-item" data-char="╬" title="Double cross">╬</div>
+                    <div class="ascii-item" data-char="═" title="Double horizontal">═</div>
+                    <div class="ascii-item" data-char="║" title="Double vertical">║</div>
+                    <div class="ascii-item" data-char="╭" title="Rounded top-left">╭</div>
+                    <div class="ascii-item" data-char="╮" title="Rounded top-right">╮</div>
+                    <div class="ascii-item" data-char="╰" title="Rounded bottom-left">╰</div>
+                    <div class="ascii-item" data-char="╯" title="Rounded bottom-right">╯</div>
+                    <div class="ascii-item" data-char="░" title="Light shade">░</div>
+                    <div class="ascii-item" data-char="▒" title="Medium shade">▒</div>
+                    <div class="ascii-item" data-char="▓" title="Dark shade">▓</div>
+                    <div class="ascii-item" data-char="█" title="Full block">█</div>
+                    <div class="ascii-item" data-char="▀" title="Upper half">▀</div>
+                    <div class="ascii-item" data-char="▄" title="Lower half">▄</div>
+                    <div class="ascii-item" data-char="▌" title="Left half">▌</div>
+                    <div class="ascii-item" data-char="▐" title="Right half">▐</div>
+                    <div class="ascii-item" data-char="■" title="Black square">■</div>
+                    <div class="ascii-item" data-char="□" title="White square">□</div>
+                    <div class="ascii-item" data-char="▪" title="Small black square">▪</div>
+                    <div class="ascii-item" data-char="▫" title="Small white square">▫</div>
+                    <div class="ascii-item" data-char="▬" title="Black rectangle">▬</div>
+                    <div class="ascii-item" data-char="▭" title="White rectangle">▭</div>
+                    <div class="ascii-item" data-char="▮" title="Vertical bar">▮</div>
+                    <div class="ascii-item" data-char="▯" title="White vertical bar">▯</div>
+                    <div class="ascii-item" data-char="◆" title="Black diamond">◆</div>
+                    <div class="ascii-item" data-char="◇" title="White diamond">◇</div>
+                </div>
+                
+                <!-- Lines Category -->
+                <div class="ascii-category" data-category="lines">
+                    <div class="ascii-item" data-char="─" title="Horizontal">─</div>
+                    <div class="ascii-item" data-char="│" title="Vertical">│</div>
+                    <div class="ascii-item" data-char="━" title="Heavy horizontal">━</div>
+                    <div class="ascii-item" data-char="┃" title="Heavy vertical">┃</div>
+                    <div class="ascii-item" data-char="═" title="Double horizontal">═</div>
+                    <div class="ascii-item" data-char="║" title="Double vertical">║</div>
+                    <div class="ascii-item" data-char="─" title="Light horizontal">─</div>
+                    <div class="ascii-item" data-char="╌" title="Dashed horizontal">╌</div>
+                    <div class="ascii-item" data-char="┄" title="Triple dash horizontal">┄</div>
+                    <div class="ascii-item" data-char="┈" title="Quadruple dash horizontal">┈</div>
+                    <div class="ascii-item" data-char="╍" title="Heavy dashed horizontal">╍</div>
+                    <div class="ascii-item" data-char="┅" title="Heavy triple dash horizontal">┅</div>
+                    <div class="ascii-item" data-char="┉" title="Heavy quadruple dash horizontal">┉</div>
+                    <div class="ascii-item" data-char="╎" title="Dashed vertical">╎</div>
+                    <div class="ascii-item" data-char="┆" title="Triple dash vertical">┆</div>
+                    <div class="ascii-item" data-char="┊" title="Quadruple dash vertical">┊</div>
+                    <div class="ascii-item" data-char="╏" title="Heavy dashed vertical">╏</div>
+                    <div class="ascii-item" data-char="┇" title="Heavy triple dash vertical">┇</div>
+                    <div class="ascii-item" data-char="┋" title="Heavy quadruple dash vertical">┋</div>
+                    <div class="ascii-item" data-char="/" title="Forward slash">/</div>
+                    <div class="ascii-item" data-char="\\" title="Backslash">\</div>
+                    <div class="ascii-item" data-char="╱" title="Light diagonal upper right to lower left">╱</div>
+                    <div class="ascii-item" data-char="╲" title="Light diagonal upper left to lower right">╲</div>
+                    <div class="ascii-item" data-char="╳" title="Light diagonal cross">╳</div>
+                    <div class="ascii-item" data-char="‾" title="Overline">‾</div>
+                    <div class="ascii-item" data-char="_" title="Underline">_</div>
+                    <div class="ascii-item" data-char="‗" title="Double low line">‗</div>
+                    <div class="ascii-item" data-char="―" title="Horizontal bar">―</div>
+                    <div class="ascii-item" data-char="‖" title="Double vertical">‖</div>
+                    <div class="ascii-item" data-char="¦" title="Broken bar">¦</div>
+                    <div class="ascii-item" data-char="|" title="Vertical bar">|</div>
+                    <div class="ascii-item" data-char="~" title="Tilde">~</div>
+                    <div class="ascii-item" data-char="∼" title="Tilde operator">∼</div>
+                    <div class="ascii-item" data-char="≈" title="Almost equal">≈</div>
+                    <div class="ascii-item" data-char="∿" title="Sine wave">∿</div>
+                    <div class="ascii-item" data-char="⌇" title="Wavy line">⌇</div>
+                    <div class="ascii-item" data-char="﹉" title="Wavy overline">﹉</div>
+                    <div class="ascii-item" data-char="﹊" title="Wavy underline">﹊</div>
+                    <div class="ascii-item" data-char="﹋" title="Wavy overline">﹋</div>
+                    <div class="ascii-item" data-char="﹌" title="Wavy underline">﹌</div>
+                    <div class="ascii-item" data-char="•" title="Bullet">•</div>
+                    <div class="ascii-item" data-char="·" title="Middle dot">·</div>
+                    <div class="ascii-item" data-char="‧" title="Hyphenation point">‧</div>
+                    <div class="ascii-item" data-char="∘" title="Ring operator">∘</div>
+                    <div class="ascii-item" data-char="○" title="White circle">○</div>
+                    <div class="ascii-item" data-char="●" title="Black circle">●</div>
+                    <div class="ascii-item" data-char="◦" title="White bullet">◦</div>
+                    <div class="ascii-item" data-char="∙" title="Bullet operator">∙</div>
+                </div>
+
+                <!-- Dividers Category -->
+                <div class="ascii-category" data-category="dividers">
+                    <div class="ascii-item ascii-divider" data-char="════════════════════════════════" title="Double line">═══════════</div>
+                    <div class="ascii-item ascii-divider" data-char="━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" title="Heavy line">━━━━━━━━━━━</div>
+                    <div class="ascii-item ascii-divider" data-char="────────────────────────────────" title="Light line">───────────</div>
+                    <div class="ascii-item ascii-divider" data-char="▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬" title="Black rectangles">▬▬▬▬▬▬▬▬▬▬▬</div>
+                    <div class="ascii-item ascii-divider" data-char="▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀" title="Upper blocks">▀▀▀▀▀▀▀▀▀▀▀</div>
+                    <div class="ascii-item ascii-divider" data-char="▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄" title="Lower blocks">▄▄▄▄▄▄▄▄▄▄▄</div>
+                    <div class="ascii-item ascii-divider" data-char="■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" title="Black squares">■■■■■■■■■■■</div>
+                    <div class="ascii-item ascii-divider" data-char="□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□" title="White squares">□□□□□□□□□□□</div>
+                    <div class="ascii-item ascii-divider" data-char="▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪" title="Small black squares">▪▪▪▪▪▪▪▪▪▪▪</div>
+                    <div class="ascii-item ascii-divider" data-char="▫▫▫▫▫▫▫▫▫▫▫▫▫▫▫▫▫▫▫▫▫▫▫▫▫▫▫▫▫▫▫▫" title="Small white squares">▫▫▫▫▫▫▫▫▫▫▫</div>
+                    <div class="ascii-item ascii-divider" data-char="●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●" title="Black circles">●●●●●●●●●●●</div>
+                    <div class="ascii-item ascii-divider" data-char="○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○○" title="White circles">○○○○○○○○○○○</div>
+                    <div class="ascii-item ascii-divider" data-char="★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★" title="Black stars">★★★★★★★★★★★</div>
+                    <div class="ascii-item ascii-divider" data-char="☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆" title="White stars">☆☆☆☆☆☆☆☆☆☆☆</div>
+                    <div class="ascii-item ascii-divider" data-char="◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆" title="Black diamonds">◆◆◆◆◆◆◆◆◆◆◆</div>
+                    <div class="ascii-item ascii-divider" data-char="◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇" title="White diamonds">◇◇◇◇◇◇◇◇◇◇◇</div>
+                    <div class="ascii-item ascii-divider" data-char="▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲" title="Up triangles">▲▲▲▲▲▲▲▲▲▲▲</div>
+                    <div class="ascii-item ascii-divider" data-char="▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼" title="Down triangles">▼▼▼▼▼▼▼▼▼▼▼</div>
+                    <div class="ascii-item ascii-divider" data-char="••••••••••••••••••••••••••••••••" title="Bullets">•••••••••••</div>
+                    <div class="ascii-item ascii-divider" data-char="∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙" title="Bullet operators">∙∙∙∙∙∙∙∙∙∙∙</div>
+                    <div class="ascii-item ascii-divider" data-char="～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～" title="Wave">～～～～～～～～～～～</div>
+                    <div class="ascii-item ascii-divider" data-char="≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈" title="Almost equal">≈≈≈≈≈≈≈≈≈≈≈</div>
+                    <div class="ascii-item ascii-divider" data-char="〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰" title="Wavy dash">〰〰〰〰〰〰〰〰〰〰〰</div>
+                    <div class="ascii-item ascii-divider" data-char="━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━" title="Spaced heavy">━ ━ ━ ━ ━ ━</div>
+                    <div class="ascii-item ascii-divider" data-char="─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─" title="Spaced light">─ ─ ─ ─ ─ ─</div>
+                    <div class="ascii-item ascii-divider" data-char="• • • • • • • • • • • • • • • •" title="Spaced bullets">• • • • • •</div>
+                    <div class="ascii-item ascii-divider" data-char="═══ ═══ ═══ ═══ ═══ ═══ ═══ ═══" title="Triple dash double">═══ ═══ ═══</div>
+                    <div class="ascii-item ascii-divider" data-char="─── ─── ─── ─── ─── ─── ─── ───" title="Triple dash">─── ─── ───</div>
+                    <div class="ascii-item ascii-divider" data-char="▬ ▬ ▬ ▬ ▬ ▬ ▬ ▬ ▬ ▬ ▬ ▬ ▬ ▬ ▬" title="Spaced rectangles">▬ ▬ ▬ ▬ ▬</div>
+                    <div class="ascii-item ascii-divider" data-char="★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★" title="Spaced stars">★ ★ ★ ★ ★</div>
+                    <div class="ascii-item ascii-divider" data-char="◆ ◆ ◆ ◆ ◆ ◆ ◆ ◆ ◆ ◆ ◆ ◆ ◆ ◆ ◆" title="Spaced diamonds">◆ ◆ ◆ ◆ ◆</div>
+                </div>
+                
+                <!-- Arrows Category -->
+                <div class="ascii-category" data-category="arrows">
+                    <div class="ascii-item" data-char="←" title="Left arrow">←</div>
+                    <div class="ascii-item" data-char="→" title="Right arrow">→</div>
+                    <div class="ascii-item" data-char="↑" title="Up arrow">↑</div>
+                    <div class="ascii-item" data-char="↓" title="Down arrow">↓</div>
+                    <div class="ascii-item" data-char="↔" title="Left-right arrow">↔</div>
+                    <div class="ascii-item" data-char="↕" title="Up-down arrow">↕</div>
+                    <div class="ascii-item" data-char="↖" title="Northwest arrow">↖</div>
+                    <div class="ascii-item" data-char="↗" title="Northeast arrow">↗</div>
+                    <div class="ascii-item" data-char="↘" title="Southeast arrow">↘</div>
+                    <div class="ascii-item" data-char="↙" title="Southwest arrow">↙</div>
+                    <div class="ascii-item" data-char="⇐" title="Double left arrow">⇐</div>
+                    <div class="ascii-item" data-char="⇒" title="Double right arrow">⇒</div>
+                    <div class="ascii-item" data-char="⇑" title="Double up arrow">⇑</div>
+                    <div class="ascii-item" data-char="⇓" title="Double down arrow">⇓</div>
+                    <div class="ascii-item" data-char="⇔" title="Double left-right arrow">⇔</div>
+                    <div class="ascii-item" data-char="⇕" title="Double up-down arrow">⇕</div>
+                    <div class="ascii-item" data-char="⟵" title="Long left arrow">⟵</div>
+                    <div class="ascii-item" data-char="⟶" title="Long right arrow">⟶</div>
+                    <div class="ascii-item" data-char="⟷" title="Long left-right arrow">⟷</div>
+                    <div class="ascii-item" data-char="⬅" title="Black left arrow">⬅</div>
+                    <div class="ascii-item" data-char="➡" title="Black right arrow">➡</div>
+                    <div class="ascii-item" data-char="⬆" title="Black up arrow">⬆</div>
+                    <div class="ascii-item" data-char="⬇" title="Black down arrow">⬇</div>
+                    <div class="ascii-item" data-char="⬈" title="Black northeast arrow">⬈</div>
+                    <div class="ascii-item" data-char="⬉" title="Black northwest arrow">⬉</div>
+                    <div class="ascii-item" data-char="⬊" title="Black southeast arrow">⬊</div>
+                    <div class="ascii-item" data-char="⬋" title="Black southwest arrow">⬋</div>
+                    <div class="ascii-item" data-char="▲" title="Black up triangle">▲</div>
+                    <div class="ascii-item" data-char="▼" title="Black down triangle">▼</div>
+                    <div class="ascii-item" data-char="◀" title="Black left triangle">◀</div>
+                    <div class="ascii-item" data-char="▶" title="Black right triangle">▶</div>
+                    <div class="ascii-item" data-char="△" title="White up triangle">△</div>
+                    <div class="ascii-item" data-char="▽" title="White down triangle">▽</div>
+                    <div class="ascii-item" data-char="◁" title="White left triangle">◁</div>
+                    <div class="ascii-item" data-char="▷" title="White right triangle">▷</div>
+                    <div class="ascii-item" data-char="⊲" title="Left normal subgroup">⊲</div>
+                    <div class="ascii-item" data-char="⊳" title="Right normal subgroup">⊳</div>
+                    <div class="ascii-item" data-char="⊴" title="Left normal subgroup or equal">⊴</div>
+                    <div class="ascii-item" data-char="⊵" title="Right normal subgroup or equal">⊵</div>
+                    <div class="ascii-item" data-char="◄" title="Black left pointer">◄</div>
+                    <div class="ascii-item" data-char="►" title="Black right pointer">►</div>
+                    <div class="ascii-item" data-char="◅" title="White left pointer">◅</div>
+                    <div class="ascii-item" data-char="▻" title="White right pointer">▻</div>
+                    <div class="ascii-item" data-char="⇦" title="White left arrow">⇦</div>
+                    <div class="ascii-item" data-char="⇨" title="White right arrow">⇨</div>
+                    <div class="ascii-item" data-char="⇧" title="White up arrow">⇧</div>
+                    <div class="ascii-item" data-char="⇩" title="White down arrow">⇩</div>
+                </div>
+                
+                <!-- Symbols Category -->
+                <div class="ascii-category" data-category="symbols">
+                    <div class="ascii-item" data-char="★" title="Black star">★</div>
+                    <div class="ascii-item" data-char="☆" title="White star">☆</div>
+                    <div class="ascii-item" data-char="✦" title="Black four pointed star">✦</div>
+                    <div class="ascii-item" data-char="✧" title="White four pointed star">✧</div>
+                    <div class="ascii-item" data-char="✪" title="Circled white star">✪</div>
+                    <div class="ascii-item" data-char="✫" title="Open center black star">✫</div>
+                    <div class="ascii-item" data-char="✬" title="Black center white star">✬</div>
+                    <div class="ascii-item" data-char="✭" title="Outlined black star">✭</div>
+                    <div class="ascii-item" data-char="✮" title="Heavy outlined black star">✮</div>
+                    <div class="ascii-item" data-char="✯" title="Pinwheel star">✯</div>
+                    <div class="ascii-item" data-char="♠" title="Spade">♠</div>
+                    <div class="ascii-item" data-char="♣" title="Club">♣</div>
+                    <div class="ascii-item" data-char="♥" title="Heart">♥</div>
+                    <div class="ascii-item" data-char="♦" title="Diamond">♦</div>
+                    <div class="ascii-item" data-char="♤" title="White spade">♤</div>
+                    <div class="ascii-item" data-char="♧" title="White club">♧</div>
+                    <div class="ascii-item" data-char="♡" title="White heart">♡</div>
+                    <div class="ascii-item" data-char="♢" title="White diamond">♢</div>
+                    <div class="ascii-item" data-char="☺" title="Smiling face">☺</div>
+                    <div class="ascii-item" data-char="☻" title="Black smiling face">☻</div>
+                    <div class="ascii-item" data-char="☼" title="Sun">☼</div>
+                    <div class="ascii-item" data-char="☽" title="Moon">☽</div>
+                    <div class="ascii-item" data-char="☾" title="Last quarter moon">☾</div>
+                    <div class="ascii-item" data-char="☀" title="Black sun">☀</div>
+                    <div class="ascii-item" data-char="☁" title="Cloud">☁</div>
+                    <div class="ascii-item" data-char="☂" title="Umbrella">☂</div>
+                    <div class="ascii-item" data-char="☃" title="Snowman">☃</div>
+                    <div class="ascii-item" data-char="☄" title="Comet">☄</div>
+                    <div class="ascii-item" data-char="♨" title="Hot springs">♨</div>
+                    <div class="ascii-item" data-char="♩" title="Quarter note">♩</div>
+                    <div class="ascii-item" data-char="♪" title="Eighth note">♪</div>
+                    <div class="ascii-item" data-char="♫" title="Beamed eighth notes">♫</div>
+                    <div class="ascii-item" data-char="♬" title="Beamed sixteenth notes">♬</div>
+                    <div class="ascii-item" data-char="♭" title="Flat">♭</div>
+                    <div class="ascii-item" data-char="♮" title="Natural">♮</div>
+                    <div class="ascii-item" data-char="♯" title="Sharp">♯</div>
+                    <div class="ascii-item" data-char="✓" title="Check mark">✓</div>
+                    <div class="ascii-item" data-char="✔" title="Heavy check mark">✔</div>
+                    <div class="ascii-item" data-char="✕" title="Multiplication X">✕</div>
+                    <div class="ascii-item" data-char="✖" title="Heavy multiplication X">✖</div>
+                    <div class="ascii-item" data-char="✗" title="Ballot X">✗</div>
+                    <div class="ascii-item" data-char="✘" title="Heavy ballot X">✘</div>
+                    <div class="ascii-item" data-char="+" title="Plus">+</div>
+                    <div class="ascii-item" data-char="-" title="Minus">-</div>
+                    <div class="ascii-item" data-char="×" title="Multiplication">×</div>
+                    <div class="ascii-item" data-char="÷" title="Division">÷</div>
+                    <div class="ascii-item" data-char="=" title="Equals">=</div>
+                    <div class="ascii-item" data-char="≠" title="Not equal">≠</div>
+                    <div class="ascii-item" data-char="<" title="Less than"><</div>
+                    <div class="ascii-item" data-char=">" title="Greater than">></div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-warning" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./script/purify.min.js"></script>
+    <script src="./script/micron-parser_original.js"></script>
+    <script src="editor.js"></script>
+
+</body>
+</html>
