@@ -5,7 +5,7 @@
 ---
 
 ![Version](https://img.shields.io/badge/version-1.0-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
+![License](https://img.shields.io/badge/license-NC_OSL-green.svg)
 ![Micron](https://img.shields.io/badge/Micron-Compatible-orange.svg)
 
 ---
